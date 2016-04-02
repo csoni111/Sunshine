@@ -25,4 +25,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.2'
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    //To use Gson for parsing json
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    //To log all requests and responses
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.0'
 }
