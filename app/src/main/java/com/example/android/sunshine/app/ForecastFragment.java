@@ -29,17 +29,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.android.sunshine.app.DataModels.Temp;
-import com.example.android.sunshine.app.DataModels.Weather;
-import com.example.android.sunshine.app.DataModels.WeatherData;
-import com.example.android.sunshine.app.DataModels.list;
+import com.example.android.sunshine.app.datamodels.Temp;
+import com.example.android.sunshine.app.datamodels.Weather;
+import com.example.android.sunshine.app.datamodels.WeatherData;
+import com.example.android.sunshine.app.datamodels.ListObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-
 
 
 import retrofit2.Call;
@@ -55,6 +53,9 @@ public class ForecastFragment extends Fragment {
 
     private ArrayAdapter<String> mForecastAdapter;
     String API = "http://api.openweathermap.org";
+    HashMap<String,String> params = new HashMap<String,String>();
+    WeatherApi service;
+    final int numDays = 7;
     public ForecastFragment() {
     }
 
@@ -62,6 +63,28 @@ public class ForecastFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
+
+        final String FORMAT_PARAM = "mode";
+        final String UNITS_PARAM = "units";
+        final String DAYS_PARAM = "cnt";
+        final String APPID_PARAM = "APPID";
+        String format = "json";
+        String units = "metric";
+
+
+
+
+        params.put(FORMAT_PARAM, format);
+        params.put(UNITS_PARAM, units);
+        params.put(DAYS_PARAM, Integer.toString(numDays));
+        params.put(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API)
+                .addConverterFactory(GsonConverterFactory.create())
+                        //.client(client)
+                .build();
+
+        service = retrofit.create(WeatherApi.class);
         setHasOptionsMenu(true);
     }
 
@@ -93,7 +116,7 @@ public class ForecastFragment extends Fragment {
         String[] data = {
                 "Click Refresh to Update List"
         };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+        java.util.List weekForecast = new ArrayList<String>(Arrays.asList(data));
 
         // Now that we have some dummy forecast data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy forecast) and
@@ -127,31 +150,11 @@ public class ForecastFragment extends Fragment {
 //                return response;
 //            }
 //        });
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API)
-                .addConverterFactory(GsonConverterFactory.create())
-                //.client(client)
-                .build();
 
-        weatherAPI service = retrofit.create(weatherAPI.class);
 
 
         final String QUERY_PARAM = "q";
-        final String FORMAT_PARAM = "mode";
-        final String UNITS_PARAM = "units";
-        final String DAYS_PARAM = "cnt";
-        final String APPID_PARAM = "APPID";
-        String format = "json";
-        String units = "metric";
-        final int numDays = 7;
-
-        HashMap<String,String> params = new HashMap<String,String>();
         params.put(QUERY_PARAM, pincode);
-        params.put(FORMAT_PARAM, format);
-        params.put(UNITS_PARAM, units);
-        params.put(DAYS_PARAM, Integer.toString(numDays));
-        params.put(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY);
-
         Call<WeatherData> call = service.getWeatherReport(params);
         call.enqueue(new Callback<WeatherData>() {
 
@@ -169,15 +172,15 @@ public class ForecastFragment extends Fragment {
                 dayTime = new Time();
 
                 String[] resultStrs = new String[numDays];
-                List<list> l = response.body().getList();
+                java.util.List l = response.body().getList();
                 for (int i = 0; i < l.size(); i++) {
                     // For now, using the format "Day, description, hi/low"
                     String day;
                     String description;
                     String highAndLow;
 
-                    // Get the list object representing the day
-                    list dayForecast = l.get(i);
+                    // Get the List object representing the day
+                    ListObject dayForecast =(ListObject) l.get(i);
 
                     // The date/time is returned as a long.  We need to convert that
                     // into something human-readable, since most people won't read "1400356800" as

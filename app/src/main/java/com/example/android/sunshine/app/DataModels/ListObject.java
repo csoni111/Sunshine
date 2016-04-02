@@ -1,12 +1,12 @@
 
-package com.example.android.sunshine.app.DataModels;
+package com.example.android.sunshine.app.datamodels;
 
 import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class list {
+public class ListObject {
 
     @SerializedName("dt")
     @Expose

@@ -1,5 +1,5 @@
 
-package com.example.android.sunshine.app.DataModels;
+package com.example.android.sunshine.app.datamodels;
 
 import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
@@ -22,7 +22,7 @@ public class WeatherData {
     private Integer cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<com.example.android.sunshine.app.DataModels.list> list = new ArrayList<com.example.android.sunshine.app.DataModels.list>();
+    private java.util.List<ListObject> list = new ArrayList<ListObject>();
 
     /**
      * 
@@ -101,7 +101,7 @@ public class WeatherData {
      * @return
      *     The list
      */
-    public java.util.List<com.example.android.sunshine.app.DataModels.list> getList() {
+    public java.util.List<ListObject> getList() {
         return list;
     }
 
@@ -110,7 +110,7 @@ public class WeatherData {
      * @param list
      *     The list
      */
-    public void setList(java.util.List<com.example.android.sunshine.app.DataModels.list> list) {
+    public void setList(java.util.List<ListObject> list) {
         this.list = list;
     }
 

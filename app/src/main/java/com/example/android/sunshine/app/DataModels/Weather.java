@@ -1,5 +1,5 @@
 
-package com.example.android.sunshine.app.DataModels;
+package com.example.android.sunshine.app.datamodels;
 
 
 import com.google.gson.annotations.Expose;
